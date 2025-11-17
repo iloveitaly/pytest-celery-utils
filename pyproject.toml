@@ -1,17 +1,22 @@
 [project]
 name = "pytest-celery-utils"
 version = "0.1.0"
-description = ""
-keywords = []
+description = "Pytest plugin for inspecting Celery task queues in Redis during tests"
+keywords = ["pytest", "celery", "testing", "redis"]
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["structlog-config==0.6.0"]
+dependencies = [
+    "celery>=5.5.3",
+    "kombu>=5.5.4",
+    "pytest>=9.0.1",
+    "redis>=7.0.1",
+    "structlog-config==0.6.0",
+]
 authors = [{ name = "Michael Bianco", email = "mike@mikebian.co" }]
 urls = { "Repository" = "https://github.com/iloveitaly/pytest-celery-utils" }
 
-# additional packaging information: https://packaging.python.org/en/latest/specifications/core-metadata/#license
-[project.scripts]
-pytest-celery-utils = "pytest_celery_utils:main"
+[project.entry-points."pytest11"]
+celery_utils = "pytest_celery_utils"
 
 [build-system]
 requires = ["uv_build>=0.8.11,<0.9.0"]
