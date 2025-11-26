@@ -10,7 +10,7 @@ dependencies = [
     "kombu>=5.5.4",
     "pytest>=9.0.1",
     "redis>=7.0.1",
-    "structlog-config==0.6.0",
+    "structlog-config==0.7.0",
 ]
 authors = [{ name = "Michael Bianco", email = "mike@mikebian.co" }]
 urls = { "Repository" = "https://github.com/iloveitaly/pytest-celery-utils" }
