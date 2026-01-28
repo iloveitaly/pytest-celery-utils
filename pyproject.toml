@@ -10,7 +10,7 @@ dependencies = [
     "kombu>=5.5.4",
     "pytest>=9.0.1",
     "redis>=7.0.1",
-    "structlog-config>=0.6.0",
+    "structlog-config>=0.7.0",
 ]
 authors = [{ name = "Michael Bianco", email = "mike@mikebian.co" }]
 urls = { "Repository" = "https://github.com/iloveitaly/pytest-celery-utils" }
@@ -19,7 +19,7 @@ urls = { "Repository" = "https://github.com/iloveitaly/pytest-celery-utils" }
 celery_utils = "pytest_celery_utils"
 
 [build-system]
-requires = ["uv_build>=0.8.11,<0.9.0"]
+requires = ["uv_build>=0.9.0,<0.10.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
@@ -27,4 +27,10 @@ build-backend = "uv_build"
 module-root = ""
 
 [dependency-groups]
-dev = ["pytest>=8.3.3", "pyright>=1.1.380", "ruff>=0.8.0"]
+dev = ["pytest>=8.3.3","pyright[nodejs]>=1.1.380","ruff>=0.8.0"]
+
+[tool.pyright]
+exclude = ["examples/", "playground/", "tmp/", ".venv/", "tests/"]
+
+[tool.ruff]
+extend-exclude = ["playground.py", "playground/"]

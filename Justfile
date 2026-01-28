@@ -11,17 +11,17 @@ up:
 test:
     uv run pytest -v
 
-# Run linting checks
+# python linting checks
+[script]
 lint FILES=".":
-    #!/usr/bin/env bash
     set +e
     exit_code=0
-    
+
     if [ -n "${CI:-}" ]; then
         # CI mode: GitHub-friendly output
         uv run ruff check --output-format=github {{FILES}} || exit_code=$?
         uv run ruff format --check {{FILES}} || exit_code=$?
-        
+
         uv run pyright {{FILES}} --outputjson > pyright_report.json || exit_code=$?
         jq -r \
             --arg root "$GITHUB_WORKSPACE/" \
@@ -38,7 +38,7 @@ lint FILES=".":
         uv run ruff format --check {{FILES}} || exit_code=$?
         uv run pyright {{FILES}} || exit_code=$?
     fi
-    
+
     if [ $exit_code -ne 0 ]; then
         echo "One or more linting checks failed"
         exit 1
@@ -51,8 +51,9 @@ lint-fix:
 
 # Clean build artifacts and cache
 clean:
-    rm -rf *.egg-info .venv
-    find . -type d -name "__pycache__" -prune -exec rm -rf {} \; 2>/dev/null || true
+    rm -rf *.egg-info .venv || true
+    find . -type f -name "*.pyc" -delete
+    find . -type d -name "__pycache__" -delete || true
 
 # Update copier template
 update_copier:
@@ -91,3 +92,32 @@ github_ruleset_protect_master_delete:
 # adds github ruleset to prevent --force and other destructive actions on the github main branch
 github_ruleset_protect_master_create: github_ruleset_protect_master_delete
 	gh api --method POST repos/$(just _github_repo)/rulesets --input - <<< '{{GITHUB_PROTECT_MASTER_RULESET}}'
+
+# Output logs of the last failed 'build' workflow for the current branch
+[script]
+github_last_build_failure:
+    BRANCH=$(git branch --show-current)
+    
+    # 1. Fetch last 20 runs (to skip over 'Metadata Sync', 'Dependabot', etc.)
+    JSON=$(gh run list -b "$BRANCH" -L 20 --json databaseId,conclusion,workflowName)
+
+    # 2. Filter: Find the latest run where name contains "build" (case-insensitive)
+    TARGET=$(echo "$JSON" | jq 'map(select(.workflowName | test("build"; "i"))) | .[0]')
+
+    # 3. Handle case where no build run is found
+    if [[ "$TARGET" == "null" ]]; then
+        echo "No 'build' workflows found in the last 20 runs for $BRANCH."
+        exit 0
+    fi
+
+    # 4. Extract Status and ID
+    CONCLUSION=$(echo "$TARGET" | jq -r .conclusion)
+    ID=$(echo "$TARGET" | jq -r .databaseId)
+
+    # 5. Check Success vs Failure
+    if [[ "$CONCLUSION" == "success" ]]; then
+        echo "latest build succeeded"
+    else
+        # Force cat pager to output logs directly to terminal
+        GH_PAGER=cat gh run view "$ID" --log-failed
+    fi
