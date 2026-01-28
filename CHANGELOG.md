@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.2](https://github.com/iloveitaly/pytest-celery-utils/compare/v0.1.1...v0.1.2) (2026-01-28)
+
+
+### Documentation
+
+* add agent instructions for readme commands in Claude, Gemini, Cursor and Opencode configs ([dd8bc48](https://github.com/iloveitaly/pytest-celery-utils/commit/dd8bc48dd093ad25d755a3d8d1317c9934cdcc07))
+* remove editor and backend prompt/config instructions ([3d29152](https://github.com/iloveitaly/pytest-celery-utils/commit/3d2915240e5e9b0d21b2e78b45a6d1427214e8a3))
+* rewrite readme with usage, features and limitations clarified ([c51ccc7](https://github.com/iloveitaly/pytest-celery-utils/commit/c51ccc7101a563cca74c715ae50d17b3be77110a))
+
 ## [0.1.1](https://github.com/iloveitaly/pytest-celery-utils/compare/v0.1.0...v0.1.1) (2026-01-28)
 
 

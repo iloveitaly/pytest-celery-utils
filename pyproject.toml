@@ -1,6 +1,6 @@
 [project]
 name = "pytest-celery-utils"
-version = "0.1.1"
+version = "0.1.2"
 description = "Pytest plugin for inspecting Celery task queues in Redis during tests"
 keywords = ["pytest", "celery", "testing", "redis"]
 readme = "README.md"
