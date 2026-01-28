@@ -7,12 +7,13 @@ This plugin provides utilities for testing Celery tasks without running workers,
 ## Installation
 
 ```bash
-uv add pytest-celery-utils
+uv add pytest-celery-utils --dev
 ```
+
+This package contains a pytest plugin which is automatically registered when the package is installed.
 
 ## Requirements
 
-- Python 3.11+
 - Celery with Redis broker
 - Redis server
 
