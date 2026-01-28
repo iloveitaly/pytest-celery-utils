@@ -1,7 +1,10 @@
 """Test configuration for pytest-celery-utils."""
 
 import pytest
+import redis
 from celery import Celery
+
+print(f"Installed redis library version: {redis.__version__}")
 
 
 @pytest.fixture
