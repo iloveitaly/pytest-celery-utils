@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.1](https://github.com/iloveitaly/pytest-celery-utils/compare/v0.1.0...v0.1.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* update readme to trigger a build ([52d69f2](https://github.com/iloveitaly/pytest-celery-utils/commit/52d69f2959c9a258f7053b3abc49ee928b8d680b))
+
+
+### Documentation
+
+* add MIT license to LICENSE.md ([2d271c8](https://github.com/iloveitaly/pytest-celery-utils/commit/2d271c848280a2de5c7abb8805d5aeb55ec30027))
+* revise readme title and expand plugin description ([968b6c2](https://github.com/iloveitaly/pytest-celery-utils/commit/968b6c2cb165e274364d12a8eed6cca9254dfe46))
+
 ## 0.1.0 (2025-11-26)
 
 
