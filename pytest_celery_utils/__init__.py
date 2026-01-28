@@ -2,17 +2,14 @@
 
 from functools import reduce
 from operator import getitem
-from typing import Any, Protocol, cast
+from typing import Any, cast
 
 import kombu.utils.json
 import pytest
 import redis
+from celery import Task
 
 __all__ = ["CeleryTestUtils", "dig", "celery_utils"]
-
-
-class HasName(Protocol):
-    name: str
 
 
 def dig(path, data, *, default=None):
@@ -54,7 +51,9 @@ class CeleryTestUtils:
         if not self.celery_app.conf.broker_url.startswith("redis"):
             raise ValueError("Only Redis broker supported")
         self.queues = list(self.celery_app.amqp.queues.keys()) or ["celery"]
-        self.redis_client = cast(redis.Redis, redis.from_url(self.celery_app.conf.broker_url))
+        self.redis_client = cast(
+            redis.Redis, redis.from_url(self.celery_app.conf.broker_url)
+        )
 
     def get_all_queued_tasks(self) -> list[dict[str, Any]]:
         """
@@ -99,7 +98,9 @@ class CeleryTestUtils:
 
         all_tasks = []
         for queue in self.queues:
-            raw_queue_contents = self.redis_client.lrange(queue, 0, -1)
+            raw_queue_contents = cast(
+                list[bytes], self.redis_client.lrange(queue, 0, -1)
+            )
 
             if not raw_queue_contents:
                 continue
@@ -110,14 +111,14 @@ class CeleryTestUtils:
 
         return all_tasks
 
-    def jobs_of_type(self, task: str | HasName) -> list[dict[str, Any]]:
-        task_name = task.name if not isinstance(task, str) else task
+    def jobs_of_type(self, task: str | Task) -> list[dict[str, Any]]:
+        task_name = task if isinstance(task, str) else task.name
         all_tasks = self.get_all_queued_tasks()
         return [
             t for t in all_tasks if dig("headers.task", t, default=None) == task_name
         ]
 
-    def count_jobs_of_type(self, task: str | HasName) -> int:
+    def count_jobs_of_type(self, task: str | Task) -> int:
         return len(self.jobs_of_type(task))
 
 
