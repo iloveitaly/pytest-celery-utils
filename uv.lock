@@ -359,7 +359,7 @@ requires-dist = [
     { name = "celery", specifier = ">=5.5.3" },
     { name = "kombu", specifier = ">=5.5.4" },
     { name = "pytest", specifier = ">=9.0.1" },
-    { name = "redis", specifier = ">=7.0.1" },
+    { name = "redis", specifier = ">=5.2.0" },
     { name = "structlog-config", specifier = ">=0.7.0" },
 ]
 
