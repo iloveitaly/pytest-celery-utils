@@ -2,7 +2,7 @@
 
 from functools import reduce
 from operator import getitem
-from typing import Any, Callable, Union
+from typing import Any, Protocol, cast
 
 import kombu.utils.json
 import pytest
@@ -11,7 +11,10 @@ import redis
 __all__ = ["CeleryTestUtils", "dig", "celery_utils"]
 
 
-# TODO use funcy version once it is released
+class HasName(Protocol):
+    name: str
+
+
 def dig(path, data, *, default=None):
     """
     Dig into nested dict using dot-path string or list of keys.
@@ -51,7 +54,7 @@ class CeleryTestUtils:
         if not self.celery_app.conf.broker_url.startswith("redis"):
             raise ValueError("Only Redis broker supported")
         self.queues = list(self.celery_app.amqp.queues.keys()) or ["celery"]
-        self.redis_client = redis.from_url(self.celery_app.conf.broker_url)
+        self.redis_client = cast(redis.Redis, redis.from_url(self.celery_app.conf.broker_url))
 
     def get_all_queued_tasks(self) -> list[dict[str, Any]]:
         """
@@ -102,19 +105,19 @@ class CeleryTestUtils:
                 continue
 
             # kombu types are terrible :/
-            queue_contents = [kombu.utils.json.loads(msg) for msg in raw_queue_contents]  # type: ignore
+            queue_contents = [kombu.utils.json.loads(msg) for msg in raw_queue_contents]
             all_tasks.extend(queue_contents)
 
         return all_tasks
 
-    def jobs_of_type(self, task: Union[str, Callable]) -> list[dict[str, Any]]:
-        task_name = task.name if callable(task) else task  # type: ignore
+    def jobs_of_type(self, task: str | HasName) -> list[dict[str, Any]]:
+        task_name = task.name if not isinstance(task, str) else task
         all_tasks = self.get_all_queued_tasks()
         return [
             t for t in all_tasks if dig("headers.task", t, default=None) == task_name
         ]
 
-    def count_jobs_of_type(self, task: Union[str, Callable]) -> int:
+    def count_jobs_of_type(self, task: str | HasName) -> int:
         return len(self.jobs_of_type(task))
 
 
