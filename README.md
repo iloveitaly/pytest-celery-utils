@@ -1,6 +1,6 @@
-# pytest-celery-utils
+# Inspect Celery Task Queues within Pytest
 
-Pytest plugin for inspecting Celery task queues in Redis during tests.
+Pytest plugin for inspecting Celery task queues in Redis during tests. Enables assertions on the number of jobs in a queue, etc. Helpful for integration tests.
 
 This plugin provides utilities for testing Celery tasks without running workers, allowing you to inspect queued tasks directly from Redis.
 
