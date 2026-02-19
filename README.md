@@ -56,4 +56,10 @@ def celery_app():
 
 Just a heads up: this is strictly for **Redis** brokers. If you're using RabbitMQ or SQS, this won't work for you. It's also designed for testing, so don't expect it to be blazing fast for production monitoring.
 
+## Related Projects
+
+* [celery-healthcheck](https://github.com/iloveitaly/celery-healthcheck): A lightweight HTTP health check server for Celery workers
+* [pytest-line-runner](https://github.com/iloveitaly/pytest-line-runner): Run pytest tests by line number instead of exact test name
+* [pytest-playwright-artifacts](https://github.com/iloveitaly/pytest-playwright-artifacts): Pytest plugin that captures HTML, screenshots, and console logs on Playwright test failures
+
 # [MIT License](LICENSE.md)
