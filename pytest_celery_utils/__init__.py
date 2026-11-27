@@ -9,7 +9,9 @@ import pytest
 import redis
 from celery import Task
 
-__all__ = ["CeleryTestUtils", "dig", "celery_utils"]
+from .version import __version__
+
+__all__ = ["CeleryTestUtils", "__version__", "celery_utils", "dig"]
 
 
 def dig(path, data, *, default=None):
@@ -33,10 +35,10 @@ def dig(path, data, *, default=None):
     keys = path.split(".") if isinstance(path, str) else path
     try:
         return reduce(getitem, keys, data)
-    except (KeyError, TypeError) as e:
+    except (KeyError, TypeError):
         if default is not None:
             return default
-        raise e
+        raise
 
 
 class CeleryTestUtils:
