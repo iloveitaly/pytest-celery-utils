@@ -131,6 +131,21 @@ dmypy.json
 # ai stuff
 .cursor/settings.local.json
 .claude/settings.local.json
+!/.cursor/environment.json
 
 # i like having temporary files specified locally vs globally
 tmp/
+
+# exploded harness rules; canonical copy is instructions.md
+/AGENT.md
+/AGENTS.md
+/CLAUDE.md
+/GEMINI.md
+/.claude/
+/.gemini/
+/.opencode/
+/.cursor/rules/
+/.cursor/commands/
+/.github/copilot-instructions.md
+/.github/instructions/
+/.github/prompts/

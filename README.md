@@ -38,6 +38,7 @@ You'll need a `celery_app` fixture configured in your `conftest.py` so the plugi
 import pytest
 from celery import Celery
 
+
 @pytest.fixture
 def celery_app():
     # Make sure to point to your Redis instance
